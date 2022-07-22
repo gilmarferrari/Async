@@ -1,0 +1,88 @@
+body {
+    margin: 0px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e9e9e9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7c7c7e46;
+    box-shadow: inset 0 0 6px #2c2c2c69;
+    border-radius: 4px;
+}
+
+.container {
+    margin: 5px;
+}
+
+.full-container {
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-center {
+    align-items: center;
+}
+
+.horizontal-align {
+    justify-content: center;
+    text-align: center !important;
+}
+
+.gap-sm {
+    gap: 5px;
+}
+
+.gap-md {
+    gap: 10px;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mat-radio-outer-circle {
+    background-color: #e2e2e2;
+    border-color: transparent !important;
+}
+
+.mat-radio-button.mat-primary .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-radio-button.mat-primary.mat-radio-checked .mat-radio-persistent-ripple,
+.mat-radio-button.mat-primary:active .mat-radio-persistent-ripple {
+    display: none;
+}
+
+.background-alert {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    gap: 5px;
+    opacity: 0.5;
+    height: calc(100vh - 128px);
+}
+
+.large-icon {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 50px;
+}
+
+.primary {
+    color: #3498DB !important;
+    font-weight: 500;
+}
