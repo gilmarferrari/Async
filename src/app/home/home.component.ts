@@ -55,7 +55,8 @@ export class HomeComponent {
     }
 
     sendRequest(url: any, body: any) {
-        if (url?.length <= 0) {
+        if (url?.length <= 0 || !url.toLowerCase().includes('http')) {
+            this.notificationService.error(this.Translations['NoHttpProtocol'])
             return;
         }
 
