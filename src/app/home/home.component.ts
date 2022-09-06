@@ -95,7 +95,7 @@ export class HomeComponent {
                 observe = this.requestService.post(request, params, body);
                 break;
             case RequestType.DELETE:
-                observe = this.requestService.get(request, params);
+                observe = this.requestService.delete(request, params);
                 break;
         }
 
