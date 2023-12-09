@@ -36,7 +36,7 @@ export class RequestService {
         return this.http.post<any>(request, body, { params: params, headers: headers }).pipe();
     }
 
-    delete(request: string, body: any | null) {
+    delete(request: string, params: any | null, body: any | null) {
         let headers = new HttpHeaders();
 
         try {
@@ -45,6 +45,6 @@ export class RequestService {
         }
         catch { }
 
-        return this.http.delete<any>(request, { body: body, headers: headers }).pipe();
+        return this.http.delete<any>(request,  { params: params, body: body, headers: headers }).pipe();
     }
 }

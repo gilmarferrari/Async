@@ -28,6 +28,7 @@ export class HomeComponent {
     file: any = {};
     dates: any[] = [];
     showingFullHistory: boolean = false;
+    requestRepeatCount: number = 0;
 
     @ViewChild("request") requestInput: any;
     @ViewChild("body") bodyInput: any;
@@ -95,10 +96,21 @@ export class HomeComponent {
                 observe = this.requestService.post(request, params, body);
                 break;
             case RequestType.DELETE:
-                observe = this.requestService.delete(request, params);
+                observe = this.requestService.delete(request, params, body);
                 break;
         }
 
+        let performedRequestsCount: number = 0;
+
+        do
+        {
+            this.performRequest(observe, requestLog);
+            performedRequestsCount++;
+        }
+        while (performedRequestsCount < this.requestRepeatCount);
+    }
+
+    performRequest(observe: any, requestLog: any) {
         observe.subscribe({
             next: (response: any) => {
                 this.history.find(i => i == requestLog).status = Status.Success;
@@ -261,6 +273,10 @@ export class HomeComponent {
 
     get Translations() {
         return Translations[Singleton.Language];
+    }
+
+    get Math() {
+        return Math;
     }
 }
 

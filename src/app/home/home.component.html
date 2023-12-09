@@ -52,10 +52,10 @@
             <small class="history-record horizontal-align tip" *ngIf="dates.length <= 0">{{ Translations['EmptyHistory']
                 }}</small>
             <cdk-accordion-item *ngFor="let date of dates" #accordionItem="cdkAccordionItem" expanded>
-                <div class="accordion-item-header" (click)="accordionItem.toggle()">
+                <mat-card class="accordion-item-header mat-elevation-z2" (click)="accordionItem.toggle()">
                     <mat-icon>{{ accordionItem.expanded ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
                     {{ date.label }}
-                </div>
+                </mat-card>
                 <a class="row history-record-actions" *ngFor="let record of date.records">
                     <button mat-button (click)="autofillFields(record)"
                         [style.display]="accordionItem.expanded ? '' : 'none'">
@@ -118,6 +118,20 @@
                 <small [class]="getTokenTime()?.prefix == 'ExpiredAt' ? 'tip DELETE' : 'tip'">{{
                     Translations[getTokenTime()?.prefix] }} {{ getTokenTime()?.expires |
                     date:Translations['DateTimeFormat'] }}</small>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <label>{{ Translations['Others'] }}</label>
+            </ng-template>
+            <br>
+            <div class="row vertical-center gap-sm content">
+                <mat-form-field>
+                    <mat-label>{{ Translations['RepeatRequest'] }}</mat-label>
+                    <input #repeatCount matInput type="number" min="0" max="1000" step="1"
+                        (blur)="repeatCount.value = Math.round(repeatCount.value)" maxlength="4"
+                        [(ngModel)]="requestRepeatCount">
+                </mat-form-field>
             </div>
         </mat-tab>
     </mat-tab-group>
