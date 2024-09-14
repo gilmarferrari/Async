@@ -1,0 +1,13 @@
+<div class="mat-dialog-content">
+    <mat-icon>translate</mat-icon>
+    <h3 class="mat-title">{{ Translations['Language'] }}</h3>
+    <mat-form-field>
+        <mat-select [(ngModel)]="Environment.Language">
+            <mat-option *ngFor="let language of languages" [value]="language">{{ Translations[language] }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" (click)="onDismiss()" tabindex="-1">OK</button>
+</div>

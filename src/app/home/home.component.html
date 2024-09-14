@@ -1,0 +1,157 @@
+<mat-toolbar color="primary">
+    <div class="row vertical-center gap-md">
+        <mat-icon>cloud_sync</mat-icon>
+        <label>Async</label>
+    </div>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>tune</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+        <a mat-menu-item href="https://github.com/gilmarferrari/Async">
+            <mat-icon class="primary">code</mat-icon>
+            <span class="primary">{{ Translations['SourceCode'] }}</span>
+        </a>
+        <a mat-menu-item [disabled]="history.length <= 0" [href]="exportHistory()" download="async_history.json">
+            <mat-icon>download</mat-icon>
+            <span>{{ Translations['ExportHistory'] }}</span>
+        </a>
+        <button mat-menu-item (click)="dialog.click()">
+            <mat-icon>upload</mat-icon>
+            <span>{{ Translations['ImportHistory'] }}</span>
+        </button>
+        <button mat-menu-item (click)="changeLanguage()">
+            <mat-icon>translate</mat-icon>
+            <span>{{ Translations['Language'] }}</span>
+        </button>
+        <button mat-menu-item (click)="login()">
+            <mat-icon>login</mat-icon>
+            <span>{{ Translations['Login'] }}</span>
+        </button>
+        <input #dialog type="file" accept=".json" (change)="importHistory($event)" hidden>
+    </mat-menu>
+</mat-toolbar>
+<div class="container">
+    <div class="row vertical-center gap-sm content">
+        <mat-form-field class="request-field">
+            <mat-select [(value)]="requestType">
+                <mat-option [value]="type" *ngFor="let type of requestTypes">{{ type }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="full-container">
+            <input matInput [placeholder]="Translations['RequestPlaceholder']" #request>
+            <button matSuffix mat-icon-button [matTooltip]="Translations['RequestButtonTooltip']" (keydown)="false"
+                (click)="sendRequest(request.value, body.value)">
+                <mat-icon>send</mat-icon>
+            </button>
+        </mat-form-field>
+    </div>
+    <aside class="history">
+        <cdk-accordion multi>
+            <small class="history-record horizontal-align tip" *ngIf="dates.length <= 0">
+                {{ Translations['EmptyHistory'] }}
+            </small>
+            <cdk-accordion-item *ngFor="let date of dates" #accordionItem="cdkAccordionItem" expanded>
+                <mat-card class="accordion-item-header mat-elevation-z2" (click)="accordionItem.toggle()">
+                    <mat-icon>{{ accordionItem.expanded ? 'arrow_drop_down' : 'arrow_right' }}</mat-icon>
+                    {{ date.label }}
+                </mat-card>
+                <a class="row history-record-actions" *ngFor="let record of date.records">
+                    <button mat-button (click)="autofillFields(record)"
+                        [style.display]="accordionItem.expanded ? '' : 'none'">
+                        <label [class]="record.status == Status.Error ? 'history-record error' : 'history-record'">
+                            <span [class]="record.type.toLocaleLowerCase()">{{ record.type }}</span>
+                            <span class="light">{{ record.url }}</span>
+                        </label>
+                    </button>
+                    <div class="vertical-align history-actions">
+                        <button mat-icon-button (click)="shareRecord(record)">
+                            <mat-icon>share</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="removeRecord(record)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </a>
+            </cdk-accordion-item>
+            <button mat-button *ngIf="!showingFullHistory" (click)="getHistory(3)"
+                class="history-load-more horizontal-align">
+                <label>{{ Translations['LoadMore'] }}</label>
+            </button>
+        </cdk-accordion>
+    </aside>
+    <mat-tab-group class="body" dynamicHeight>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <label>{{ Translations['Body'] }}</label>
+            </ng-template>
+            <mat-radio-group color="primary" [(ngModel)]="bodyType" class="row vertical-center gap-md radio-group">
+                <mat-radio-button value="Json">{{ Translations['JSON'] }}</mat-radio-button>
+                <mat-radio-button value="File">{{ Translations['File'] }}</mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field class="full-container">
+                <mat-label>{{ Translations['Body'] }}</mat-label>
+                <div *ngIf="bodyType == BodyType.File">
+                    <button mat-button (click)="bodyDialog.click()">{{ file.name ?
+                        file?.name : Translations['ChooseFile'] }}
+                    </button>
+                    <input #bodyDialog type="file" (change)="uploadFile($event)" hidden>
+                </div>                
+                <textarea matInput [placeholder]="Translations['BodyPlaceholder']" #body rows="10" id="body"
+                    (input)="beutify(bodyInput)" [hidden]="bodyType != BodyType.JSON">
+                </textarea>
+            </mat-form-field>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <label>{{ Translations['Headers'] }}</label>
+            </ng-template>
+            <br>
+            <div class="row vertical-center gap-sm content">
+                <mat-form-field>
+                    <mat-label>{{ Translations['Authorization'] }}</mat-label>
+                    <mat-select [(value)]="Environment.AuthorizationType">
+                        <mat-option [value]="type" *ngFor="let type of authorizationTypes">
+                            {{ Translations[type] }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngIf="Environment.AuthorizationType == AuthType.Bearer">
+                    <mat-label>
+                        {{ Translations['BearerToken'] }}
+                    </mat-label>
+                    <input matInput [(ngModel)]="Environment.Token">
+                </mat-form-field>
+                <small [class]="tokenExpiration?.prefix == 'ExpiredAt' ? 'tip delete' : 'tip'">
+                    {{ Translations[tokenExpiration?.prefix] }} {{ tokenExpiration?.expires |
+                    date:Translations['DateTimeFormat'] }}
+                </small>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <label>{{ Translations['Others'] }}</label>
+            </ng-template>
+            <br>
+            <div class="row vertical-center gap-sm content">
+                <mat-form-field>
+                    <mat-label>{{ Translations['RepeatRequest'] }}</mat-label>
+                    <input #repeatCount matInput type="number" min="0" max="1000" step="1"
+                        (blur)="repeatCount.value = Math.round(repeatCount.value)" maxlength="4"
+                        [(ngModel)]="requestRepeatCount">
+                </mat-form-field>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <mat-form-field class="result">
+        <mat-label>{{ Translations['Response'] }}</mat-label>
+        <pre>{{ response | json }}</pre>
+        <input matInput readonly>
+        <small class="tip">{{ responseExplanation }}</small>
+    </mat-form-field>
+</div>
+<p class="mat-body-1 background-alert">
+    <mat-icon class="large-icon">screenshot_monitor</mat-icon>
+    <label>{{ Translations['UnsupportedResolution'] }}</label>
+</p>

@@ -1,0 +1,11 @@
+<div class="mat-dialog-content">
+    <p>
+        <mat-icon class="icon-{{ icon }}" [color]="color">{{ icon }}</mat-icon>
+    </p>
+    <h1 mat-dialog-title>{{ title }}</h1>
+    <p class="mat-body-1">{{message}}</p>
+</div>
+
+<div mat-dialog-actions align="center">
+    <button mat-raised-button [color]="color" (click)="onDismiss()" tabindex="-1">OK</button>
+</div>

@@ -1,0 +1,29 @@
+.mat-dialog-content {
+    text-align: center;
+    width: 350px !important;
+    color: darkslategray !important;
+}
+
+.mat-icon {
+    height: 80px;
+    width: 80px;
+    font-size: 80px;
+    opacity: 0.7;
+}
+
+.icon-error {
+    animation: spiral 700ms;
+}
+
+h1 {
+    font: 500 20px/32px Roboto,Helvetica Neue,sans-serif;
+}
+
+@keyframes spiral {
+    from {
+        transform: scale(0) rotate(-360deg);
+    }
+    to {
+        transform: scale(1);
+    }
+}
