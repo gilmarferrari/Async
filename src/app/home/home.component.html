@@ -97,9 +97,9 @@
                         file?.name : Translations['ChooseFile'] }}
                     </button>
                     <input #bodyDialog type="file" (change)="uploadFile($event)" hidden>
-                </div>                
+                </div>
                 <textarea matInput [placeholder]="Translations['BodyPlaceholder']" #body rows="10" id="body"
-                    (input)="beutify(bodyInput)" [hidden]="bodyType != BodyType.JSON">
+                    (input)="beautify(bodyInput)" [hidden]="bodyType != BodyType.JSON">
                 </textarea>
             </mat-form-field>
         </mat-tab>

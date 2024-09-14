@@ -52,7 +52,7 @@ export class HomeComponent {
         Environment.AuthorizationType = authType ?? AuthorizationType.None;
         Environment.Token = undefined;
         
-        this.beutify(this.bodyInput);
+        this.beautify(this.bodyInput);
 
         this.router.navigate(['/async'], { relativeTo: this.route, replaceUrl: true });
     }
@@ -136,7 +136,7 @@ export class HomeComponent {
         });
     }
 
-    beutify(field: any) {
+    beautify(field: any) {
         try {
             field.nativeElement.value = field.nativeElement.value ? JSON.stringify(JSON.parse(field.nativeElement.value), null, 4) : field.nativeElement.value;
         }
@@ -151,7 +151,7 @@ export class HomeComponent {
         Environment.AuthorizationType = record.authType ?? AuthorizationType.None;
         Environment.Token = record.token;
 
-        this.beutify(this.bodyInput);
+        this.beautify(this.bodyInput);
     }
 
     exportHistory() {
@@ -244,7 +244,7 @@ export class HomeComponent {
         let sharedComponent = `https://gilmarferrari.github.io/portfolio/projects/async?requestType=${record.type}&url=${record.url}&body=${record.body}&authType=${record.authType}`;
         sharedComponent = sharedComponent.replace(/\s/g, "").replace(/"/g, "'");
         this.clipboard.copy(sharedComponent);
-        
+
         this.notificationService.notifyChange(this.Translations['Copied']);
     }
 
